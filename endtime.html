@@ -6,15 +6,10 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.10.6/dayjs.min.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=M+PLUS+1p:wght@100;300;400;500;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+1p:wght@100;300;400;500;700;800;900&display=swap"
+    rel="stylesheet">
 <link href="https://fonts.cdnfonts.com/css/digital-7-mono" rel="stylesheet">
 <style>
-    #sec,
-    #time {
-        line-height: 1em;
-        letter-spacing: 1px
-    }
-
     * {
         margin: 0;
         padding: 0
@@ -24,7 +19,7 @@
         --text-color: #000;
         --bg-color: #fff
     }
-    
+
     body {
         font-family: Digital-7, sans-serif;
         font-weight: 700;
@@ -32,9 +27,10 @@
         color: var(--text-color)
     }
 
-    .nowtime,#endtime {
+    #endtime {
         font-family: 'M PLUS 1p', sans-serif;
-        font-weight: 700;
+        font-weight: 900;
+        font-size: 32px;
         width: fit-content;
         margin: 10px auto;
         padding: 5px 10px;
@@ -42,20 +38,21 @@
         background-color: var(--bg-color)
     }
 
-    #endtime {
-        font-family: 'M PLUS 1p', sans-serif;
-        font-weight: 700;
-        font-size: 22px
-    }
-
-    #time,#setendtime {
-        font-size: 50px;
+    #time,
+    #setendtime {
+        font-size: 100px;
         font-family: 'digital-7', sans-serif;
     }
 
     #sec {
         margin-left: 0px;
         font-size: 28px
+    }
+
+    #sec,
+    #time {
+        line-height: 1em;
+        letter-spacing: 1px
     }
 
     #colon {
@@ -76,6 +73,7 @@
             opacity: 0
         }
     }
+
     #sec-colon {
         font-size: 28px;
         margin: 0 1px;
@@ -107,60 +105,75 @@
     }
 </style>
 
-<div id="endtime">
-    <div>本日の終了予定時刻</div>
-    <div>
-        <span id="setendtime">
-        </span>
-        <span>頃</span>
-    <div>
-</div>
-
-<div id="setter">
-    <label for="hours">時間:</label>
-    <select id="hours">
-        <!-- 0時から23時まで -->
+<body>
+    <div id="endtime">
+        <div>本日の終了予定時刻</div>
+        <div>
+            <span id="setendtime"></span>
+            <span>頃</span>
+            <div>
+            </div>
+        </div>
+    </div>
+    <div id="setter">
+        <label for="hours">時間:</label>
+        <select id="hours">
+            <!-- 0時から23時まで -->
+            <script>
+                for (let i = 0; i < 24; i++) {
+                    let option = document.createElement('option');
+                    option.value = i;
+                    option.text = (i < 10 ? '0' : '') + i; // 2桁表示
+                    document.getElementById('hours').appendChild(option);
+                }
+            </script>
+        </select>
+        <label for="minutes">分:</label>
+        <select id="minutes">
+            <!-- 0分から59分まで -->
+            <script>
+                for (let i = 0; i < 60; i++) {
+                    let option = document.createElement('option');
+                    option.value = i;
+                    option.text = (i < 10 ? '0' : '') + i; // 2桁表示（0を追加）
+                    document.getElementById('minutes').appendChild(option);
+                }
+            </script>
+        </select>
+        <button onclick="showSelectedTime()">選択した時間を表示</button>
         <script>
-            for (let i = 0; i < 24; i++) {
-                let option = document.createElement('option');
-                option.value = i;
-                option.text = (i < 10 ? '0' : '') + i; // 2桁表示
-                document.getElementById('hours').appendChild(option);
-            }
-        </script>
-    </select>
-    
-    <label for="minutes">分:</label>
-    <select id="minutes">
-        <!-- 0分から59分まで -->
-        <script>
-            for (let i = 0; i < 60; i++) {
-                let option = document.createElement('option');
-                option.value = i;
-                option.text = (i < 10 ? '0' : '') + i; // 2桁表示（0を追加）
-                document.getElementById('minutes').appendChild(option);
-            }
-        </script>
-    </select>
-    
-    <button onclick="showSelectedTime()">選択した時間を表示</button>
-    
-    
-    <script>
-        const showSelectedTime = function () {
-            let hours = document.getElementById("hours").value;
-            let minutes = document.getElementById("minutes").value;
-    
-            // 時間を数値に変換してから比較
-            hours = parseInt(hours, 10);
-            hours = (hours < 10 ? '0' : '') + hours;
-            // 分を数値に変換してから比較
-            minutes = parseInt(minutes, 10);
-            minutes = (minutes < 10 ? '0' : '') + minutes;
-    
-            document.getElementById("setendtime").innerHTML = `${hours}<span id="colon">:</span>${minutes}`;
-        }
-    
-    </script>
-</div>
 
+            // URLパラメータから時間と分を取得し、セレクトボックスに設定する関数
+            function setTimeFromURL() {
+                const params = new URLSearchParams(window.location.search);
+                const hours = params.get('hours');
+                const minutes = params.get('minutes');
+
+                if (hours !== null && minutes !== null) {
+                    // URLパラメータで指定された時間と分をセレクトボックスに反映
+                    document.getElementById('hours').value = hours;
+                    document.getElementById('minutes').value = minutes;
+                    // 取得した値を表示
+                    showSelectedTime();
+                }
+            }
+
+            const showSelectedTime = function () {
+                let hours = document.getElementById("hours").value;
+                let minutes = document.getElementById("minutes").value;
+
+                // 時間を数値に変換してから比較
+                hours = parseInt(hours, 10);
+                hours = (hours < 10 ? '0' : '') + hours;
+                // 分を数値に変換してから比較
+                minutes = parseInt(minutes, 10);
+                minutes = (minutes < 10 ? '0' : '') + minutes;
+
+                document.getElementById("setendtime").innerHTML = `${hours}<span id="colon">:</span>${minutes}`;
+            }
+            // ページ読み込み時にURLパラメータの値を反映
+            window.onload = setTimeFromURL;
+        </script>
+    </div>
+    <footer></footer>
+</body>
