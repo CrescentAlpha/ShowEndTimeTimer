@@ -1,0 +1,106 @@
+<!-- Copyright (c) 2020 mooncape https://mooncape.net/ | Copyright (c) 2018-present, iamkun Released under the MIT license https://github.com/iamkun/dayjs/blob/dev/LICENSE -->
+<!DOCTYPE html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<title>Clock</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.10.6/dayjs.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap" rel="stylesheet">
+<style>
+    #sec,
+    #time {
+        line-height: 1em;
+        letter-spacing: 1px
+    }
+
+    * {
+        margin: 0;
+        padding: 0
+    }
+
+    :root {
+        --text-color: #000;
+        --bg-color: #fff
+    }
+
+    body {
+        font-family: Roboto, sans-serif;
+        font-weight: 700;
+        text-align: center;
+        color: var(--text-color)
+    }
+
+    .nowtime {
+        width: fit-content;
+        margin: 10px auto;
+        padding: 5px 10px;
+        border-radius: 8px;
+        background-color: var(--bg-color)
+    }
+
+    #time {
+        font-size: 40px
+    }
+
+    #sec {
+        margin-left: 0px;
+        font-size: 28px
+    }
+
+    #colon {
+        margin: 0 1px;
+        vertical-align: 0%;
+        animation: 1s linear infinite blink
+    }
+
+    @keyframes blink {
+
+        0%,
+        49% {
+            opacity: 1
+        }
+
+        100%,
+        50% {
+            opacity: 0
+        }
+    }
+    #sec-colon {
+        font-size: 28px;
+        margin: 0 1px;
+        vertical-align: 0%;
+        animation: 1s linear infinite blink
+    }
+
+    @keyframes blink {
+
+        0%,
+        49% {
+            opacity: 1
+        }
+
+        100%,
+        50% {
+            opacity: 0
+        }
+    }
+
+    footer {
+        position: absolute;
+        margin-top: 500px;
+        width: 100%
+    }
+</style>
+<div class="nowtime">
+    <div id="time">
+        <script language="JavaScript">
+            const day = function () {
+                const n = dayjs(new Date),
+                t = document.getElementById("time");
+                t.innerHTML = `${n.format("HH")}<span id="colon">:</span>${n.format("mm")}<span id="sec-colon">:</span><span id="sec">${n.format("ss")}</span>` };
+                setInterval(day, 1000)</script>
+    </div>
+</div>
+<footer>
+</footer>
